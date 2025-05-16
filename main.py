@@ -182,3 +182,4 @@ class Main:
 
 
 m = Main(3, 1)
+n = None
