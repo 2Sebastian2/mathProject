@@ -1,5 +1,5 @@
 import random
-from elements import XVar, Fraction
+from elements import XVar, Fraction, randomChoice
 
 
 # Class which handles all the equation factory
@@ -157,8 +157,10 @@ class Equation:
         return text
 
     def randomResult(self):
-        # More coming soon
-        return
+        if randomChoice():
+            return Fraction(self, [random.randint(1, 50)], [random.randint(1, 50)])
+        else:
+            return random.randint(0, 50)
 
 # m = Main(3, 1)
 
