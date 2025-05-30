@@ -1,65 +1,30 @@
 import random
-from typing import Self
+from elements import XVar, Fraction
 
 
-# Clase para crear Incógnitas
-class XVar:
-
-    def __init__(self, multiplier: int, grade: int):
-        self.multiplier = multiplier
-        self.grade = grade
-
-    def __str__(self, init: bool = False):
-        if init:
-            return (f"{abs(self.multiplier)}x^{self.grade}" if self.grade != 1 else f"{abs(self.multiplier)}x") if self.multiplier != 1 else (f"x^{self.grade}" if self.grade != 1 else f"x")
-        else:
-            return (
-                f" {abs(self.multiplier)}x^{self.grade}" if self.grade != 1 else f" {abs(self.multiplier)}x") if self.multiplier != 1 else (f" x^{self.grade}" if self.grade != 1 else f" x")
-
-    def __neg__(self):
-        self.multiplier = -self.multiplier
-        return self
-
-    def __mul__(self, other):
-        return other * self.multiplier
-
-    def __divmod__(self, other):
-        self.multiplier = Fraction(self.multiplier, other, 1)
-        return self
-
-    def frac(self, denominator: int):
-        self.multiplier = Fraction(self.multiplier, denominator, 1)
-
-
-# Clase para crear Fracciones
-class Fraction:
-
-    def __init__(self, numerator: int | XVar, denominator: int | XVar, grade: int):
-        self.numerator = numerator
-        self.denominator = denominator
-        self.grade = grade
-
-    def divide(self):
-        return self.numerator / self.denominator
-
-    def fuse(self):
-        if isinstance(self.numerator, XVar):
-            self.numerator.frac(self.denominator)
-            return self.numerator
-
-
-# Clase donde se creará la ecuación
+# Class which handles all the equation factory
 class Equation:
 
-    def __init__(self, level: int, grade: int, result: int):
-        self.grade = grade
-        self.result = result
+    def __init__(self, quantity: int, level: int, friendlyView: bool = False):
+        self.quantity = quantity
         self.level = level
+        self.saved: list = []
 
-        self.left: list = [XVar(1, 1)]
-        self.right: list = [result]
+        for i in range(15):
+            self.left: list = [XVar(self, 1, 1)]
+            self.right: list = []
+            self.generate()
+            if not friendlyView:
+                print(f"{i + 1}. {self}")
+        # More coming soon
 
-    def multiplyAndUpdate(self, num: int):
+
+    def generate(self):
+        result = self.randomResult()
+        self.right.append(result)
+        # More coming soon
+
+    def multiplyAndUpdate(self, num: int | Fraction):
         counter = 0
         for item in self.left:
             if isinstance(item, int):
@@ -191,20 +156,9 @@ class Equation:
 
         return text
 
+    def randomResult(self):
+        # More coming soon
+        return
 
-# Clase encargada de gestionar los ejercicios y el nivel de dificultad de los mismos
-class Main:
-
-    def __init__(self, quantity: int, level: int):
-        self.quantity = quantity
-        self.level = level
-
-        for i in range(100):
-            self.eq = Equation(level, 1, random.randint(0, 9))
-            for j in range(15):
-                self.eq.randomEvent()
-            print(self.eq)
-
-
-m = Main(3, 1)
+# m = Main(3, 1)
 

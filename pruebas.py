@@ -1,10 +1,8 @@
-import random
 
-mixList: list = [1, 2, 3, 4, 5, 6]
-random.shuffle(mixList)
-print(mixList)
+elements = [1, 2, [3 , 4, 5, 6], 7, 8]
 
-
-class Group:
-
-    def __init__(self, content: list):
+counter = 2
+for e in elements[2]:
+    elements.insert(counter, e)
+    counter += 1
+    print(elements)
