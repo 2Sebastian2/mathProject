@@ -106,5 +106,5 @@ class Fraction:
             self.numerator += other
         return self
 
-    def divide(self):
-        return
+    def simplify(self):
+        if all(self.numerator) //
