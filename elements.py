@@ -1,4 +1,5 @@
 from main import Equation
+from sympy import primerange
 import random
 
 def randomChoice():
@@ -107,4 +108,7 @@ class Fraction:
         return self
 
     def simplify(self):
-        if all(self.numerator) //
+        if all(self.numerator) % sum(self.denominator) ==
+
+    def factor(self, left: bool, right: bool):
+        if left:
