@@ -27,7 +27,25 @@ class Equation:
     def generate(self):
         self.randomResult()
         self.right.append(self.solution)
-        # More coming soon
+        num = 1
+        for i in range(20):
+            if randomChoice():
+                num = XVar(self, random.randint(1, 9), 1)
+            elif randomChoice():
+                num = Fraction(self, [random.randint(1, 9)], [random.randint(1, 9)], 1, 1)
+            else:
+                num = random.randint(1, 10)
+            match random.randint(0, 6):
+                case 0:
+                    self.multiply(num)
+                case 1:
+                    self.divide(random.randint(1, 10))
+                case 2:
+                    self.sum(num)
+                case 3:
+                    self.subtract(num)
+                case 4:
+                    self.scramble()
 
     def multiply(self, num: int | XVar | Fraction):
 
@@ -42,7 +60,16 @@ class Equation:
             counter += 1
 
     def divide(self, num: int):
-        pass
+
+        counter = 0
+        for item in self.left:
+            self.left[counter] = item / num
+            counter += 1
+
+        counter = 0
+        for item in self.right:
+            self.right[counter] = item / num
+            counter += 1
 
     def sum(self, num: int | XVar | Fraction):
         self.left.append(num)

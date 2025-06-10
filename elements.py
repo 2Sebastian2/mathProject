@@ -104,11 +104,101 @@ class Fraction:
             self.numerator *= other.numerator
             self.denominator *= other.denominator
         else:
-            self.numerator += other
+            self.numerator *= other
+        return self
+
+    def __truediv__(self, other: int):
+        self.denominator.multiplier *= other
         return self
 
     def simplify(self):
-        if all(self.numerator) % sum(self.denominator) ==
+        self.factor(True, True)
 
-    def factor(self, left: bool, right: bool):
-        if left:
+        numeratorList = []
+        primeList = primerange(2, self.numerator.multiplier // 2)
+        for prime in primeList:
+            while True:
+                if self.numerator.multiplier % prime == 0:
+                    numeratorList.append(prime)
+                    self.numerator.multiplier /= prime
+                else:
+                    break
+            if self.numerator.multiplier == 1:
+                self.numerator.multiplier = numeratorList
+                break
+
+        denominatorList = []
+        primeList = primerange(2, self.denominator.multiplier // 2)
+        for prime in primeList:
+            while True:
+                if self.denominator.multiplier % prime == 0:
+                    denominatorList.append(prime)
+                    self.denominator.multiplier /= prime
+                else:
+                    break
+            if self.denominator.multiplier == 1:
+                self.denominator.multiplier = denominatorList
+                break
+
+        for prime in numeratorList:
+            if prime in denominatorList:
+                numeratorList.remove(prime)
+                denominatorList.remove(prime)
+
+        for num in numeratorList:
+            self.numerator.multiplier *= num
+
+        for den in denominatorList:
+            self.denominator.multiplier *= den
+
+
+    def factor(self, bnumerator: bool, bdenominator: bool):
+        if bnumerator:
+            counter = 0
+            for element in self.numerator:
+                elementList = []
+                primeList = primerange(2, element // 2)
+
+                for prime in primeList:
+                    while True:
+                        if element % prime == 0:
+                            elementList.append(prime)
+                            element /= prime
+                        else:
+                            break
+                    if element == 1:
+                        self.numerator[counter] = elementList
+                        break
+                counter += 1
+
+            for element in self.numerator:
+                for prime in element:
+                    if prime in all(self.numerator):
+                        self.numerator.multiplier *= prime
+                        for everyList in self.numerator:
+                            everyList.remove(prime)
+
+        if bdenominator:
+            counter = 0
+            for element in self.denominator:
+                elementList = []
+                primeList = primerange(2, element // 2)
+
+                for prime in primeList:
+                    while True:
+                        if element % prime == 0:
+                            elementList.append(prime)
+                            element /= prime
+                        else:
+                            break
+                    if element == 1:
+                        self.denominator[counter] = elementList
+                        break
+                counter += 1
+
+            for element in self.denominator:
+                for prime in element:
+                    if prime in all(self.denominator):
+                        self.denominator.multiplier *= prime
+                        for everyList in self.denominator:
+                            everyList.remove(prime)
