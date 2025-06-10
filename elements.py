@@ -16,12 +16,8 @@ class XVar:
         self.multiplier = multiplier
         self.grade = power
 
-    def __str__(self, init: bool = False):
-        if init:
-            return (f"{abs(self.multiplier)}x^{self.grade}" if self.grade != 1 else f"{abs(self.multiplier)}x") if self.multiplier != 1 else (f"x^{self.grade}" if self.grade != 1 else f"x")
-        else:
-            return (
-                f" {abs(self.multiplier)}x^{self.grade}" if self.grade != 1 else f" {abs(self.multiplier)}x") if self.multiplier != 1 else (f" x^{self.grade}" if self.grade != 1 else f" x")
+    def __str__(self):
+        return f"{abs(self.multiplier) if abs(self.multiplier) != 1 else None}x^{self.grade if self.grade != 0 else None}"
 
     def __neg__(self):
         self.multiplier = -self.multiplier
@@ -33,6 +29,9 @@ class XVar:
     def __truediv__(self, other):
         self.multiplier = Fraction(self.parent, [self.multiplier], other)
         return self
+
+    def __int__(self):
+        return self.multiplier
 
 
 class Group:
@@ -82,6 +81,17 @@ class Group:
             return self.parent.right
         else:
             raise Exception("Object was not found in parent group.")
+
+    def __str__(self):
+        text = f"{abs(self.multiplier) if abs(self.multiplier) != 1 else None}("
+        counter = 0
+        for element in self.elements:
+            if counter == 0:
+                text += f"- {abs(element) if isinstance(element, int) else element}" if element < 0 else f"{element}"
+            else:
+                text += f" - {abs(element) if isinstance(element, int) else element}" if element < 0 else f" + {element}"
+            counter += 1
+        return text + ")"
 
     def common_factor(self):
         pass
@@ -202,3 +212,6 @@ class Fraction:
                         self.denominator.multiplier *= prime
                         for everyList in self.denominator:
                             everyList.remove(prime)
+
+    def __str__(self):
+        return f"{abs(self.multiplier) if abs(self.multiplier) != 1 else None}({self.numerator}/{self.denominator})"

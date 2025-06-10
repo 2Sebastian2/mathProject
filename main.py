@@ -11,7 +11,7 @@ class Equation:
         self.saved: list = []
         self.solution: int
 
-        for i in range(15):
+        for i in range(quantity):
             self.left: list = [XVar(self, 1, 1)]
             self.right: list = []
             self.generate()
@@ -105,25 +105,21 @@ class Equation:
         text = ""
         counter = 0
         for item in self.left:
+
             if counter == 0:
-                if isinstance(item, int):
-                    text += f"- {abs(item)}" if item < 0 else f"{item}"
-                elif isinstance(item, XVar):
-                    text += f"- {item.__str__(True)}" if item.multiplier < 0 else f"{item.__str__(True)}"
+                text += f"- {abs(item) if isinstance(item, int) else item}" if item < 0 else f"{item}"
             else:
-                if isinstance(item, int):
-                    text += f" - {abs(item)}" if item < 0 else f" + {item}"
-                elif isinstance(item, XVar):
-                    text += f" - {item}" if item.multiplier < 0 else f" + {item}"
+                text += f" - {abs(item) if isinstance(item, int) else item}" if item < 0 else f" + {item}"
+
             counter += 1
 
         text += " ="
         counter = 0
         for item in self.right:
-            if isinstance(item, int):
-                text += f" - {abs(item)}" if item < 0 else f" + {item}"
-            elif isinstance(item, XVar):
-                text += f" - {item}" if item.multiplier < 0 else f" + {item}"
+            if counter == 0:
+                text += f" - {abs(item) if isinstance(item, int) else item}" if item < 0 else f" {item}"
+            else:
+                text += f" - {abs(item) if isinstance(item, int) else item}" if item < 0 else f" + {item}"
             counter += 1
 
         return text
@@ -135,5 +131,4 @@ class Equation:
         else:
             self.solution = random.randint(0, 50)
 
-# m = Main(3, 1)
-
+e = Equation(10, 1, True)
