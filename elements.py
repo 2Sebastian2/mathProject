@@ -1,4 +1,3 @@
-from main import Equation
 from sympy import primerange
 import random
 
@@ -11,7 +10,7 @@ def randomChoice():
 # Clase para crear Incógnitas
 class XVar:
 
-    def __init__(self, parent: Equation, multiplier: int, power: int):
+    def __init__(self, parent, multiplier: int, power: int):
         self.parent = parent
         self.multiplier = multiplier
         self.grade = power
@@ -24,7 +23,8 @@ class XVar:
         return self
 
     def __mul__(self, other):
-        return other * self.multiplier
+        self.multiplier = other * self.multiplier
+        return self
 
     def __truediv__(self, other):
         self.multiplier = Fraction(self.parent, [self.multiplier], other)
@@ -33,10 +33,17 @@ class XVar:
     def __int__(self):
         return self.multiplier
 
+    def __lt__(self, other):
+        if other == 0:
+            if self.multiplier < 0:
+                return True
+            else:
+                return False
+
 
 class Group:
 
-    def __init__(self, parent: Equation, elements: list = [], multiplier: int = 1, power: int = 1, locked: bool = False):
+    def __init__(self, parent, elements: list = [], multiplier: int = 1, power: int = 1, locked: bool = False):
         self.parent = parent
         self.multiplier = multiplier
         self.elements = elements
@@ -100,7 +107,7 @@ class Group:
 # Clase para crear Fracciones
 class Fraction:
 
-    def __init__(self, parent: Equation, numerator: list | Group, denominator: list | Group, multiplier: int = 1, power: int = 1):
+    def __init__(self, parent, numerator: list | Group, denominator: list | Group, multiplier: int = 1, power: int = 1):
         self.multiplier = multiplier
         self.power = power
         self.parent = parent
@@ -109,16 +116,16 @@ class Fraction:
 
     def __mul__(self, other):
         if randomChoice():
-            self.multiplier *= other
+            self.multiplier = other * self.multiplier
         elif isinstance(other, Fraction):
-            self.numerator *= other.numerator
-            self.denominator *= other.denominator
+            self.numerator = self.numerator * other.numerator
+            self.denominator = self.denominator * other.denominator
         else:
-            self.numerator *= other
+            self.numerator = self.numerator * other
         return self
 
     def __truediv__(self, other: int):
-        self.denominator.multiplier *= other
+        self.denominator = self.denominator * other
         return self
 
     def simplify(self):
@@ -165,53 +172,84 @@ class Fraction:
     def factor(self, bnumerator: bool, bdenominator: bool):
         if bnumerator:
             counter = 0
-            for element in self.numerator:
+            for element in self.numerator.elements:
                 elementList = []
                 primeList = primerange(2, element // 2)
 
                 for prime in primeList:
+                    counter2 = 0
                     while True:
+                        if element == 0 or element == 1 and counter2 == 0:
+                            elementList.append(element)
+                            break
                         if element % prime == 0:
                             elementList.append(prime)
                             element /= prime
                         else:
                             break
-                    if element == 1:
-                        self.numerator[counter] = elementList
+                        counter2 += 1
+                    if element == 1 or element == 0:
+                        self.numerator.elements[counter] = elementList
                         break
                 counter += 1
 
-            for element in self.numerator:
+            for element in self.numerator.elements:
                 for prime in element:
-                    if prime in all(self.numerator):
+                    notFactorable = False
+                    for element2 in self.numerator.elements:
+                        if not prime in element2:
+                            notFactorable = True
+
+                    if not notFactorable:
                         self.numerator.multiplier *= prime
-                        for everyList in self.numerator:
+                        for everyList in self.numerator.elements:
                             everyList.remove(prime)
 
         if bdenominator:
             counter = 0
-            for element in self.denominator:
+            for element in self.denominator.elements:
                 elementList = []
                 primeList = primerange(2, element // 2)
 
                 for prime in primeList:
+                    counter2 = 0
                     while True:
+                        if element == 0 or element == 1 and counter2 == 0:
+                            elementList.append(element)
+                            break
                         if element % prime == 0:
                             elementList.append(prime)
                             element /= prime
                         else:
                             break
-                    if element == 1:
-                        self.denominator[counter] = elementList
+                        counter2 += 1
+                    if element == 1 or element == 0:
+                        self.denominator.elements[counter] = elementList
                         break
                 counter += 1
 
-            for element in self.denominator:
+            for element in self.denominator.elements:
                 for prime in element:
-                    if prime in all(self.denominator):
-                        self.denominator.multiplier *= prime
-                        for everyList in self.denominator:
+                    notFactorable = False
+                    for element2 in self.numerator.elements:
+                        if not prime in element2:
+                            notFactorable = True
+
+                    if not notFactorable:
+                        self.numerator.multiplier *= prime
+                        for everyList in self.numerator.elements:
                             everyList.remove(prime)
 
     def __str__(self):
         return f"{abs(self.multiplier) if abs(self.multiplier) != 1 else None}({self.numerator}/{self.denominator})"
+
+    def __neg__(self):
+        self.multiplier = -self.multiplier
+        return self
+
+    def __lt__(self, other):
+        if other == 0:
+            if self.multiplier < 0:
+                return True
+            else:
+                return False
