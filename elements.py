@@ -56,7 +56,7 @@ class Group:
         else:
             counter = 0
             for e in self.elements:
-                self.elements[counter] = e * other
+                self.elements[counter] = other * e
                 counter += 1
             if self.locked:
                 pass
@@ -174,23 +174,23 @@ class Fraction:
             counter = 0
             for element in self.numerator.elements:
                 elementList = []
-                primeList = primerange(2, element // 2)
+                primeList = primerange(2, element)
 
-                for prime in primeList:
-                    counter2 = 0
-                    while True:
-                        if element == 0 or element == 1 and counter2 == 0:
-                            elementList.append(element)
-                            break
-                        if element % prime == 0:
-                            elementList.append(prime)
-                            element /= prime
-                        else:
-                            break
-                        counter2 += 1
-                    if element == 1 or element == 0:
-                        self.numerator.elements[counter] = elementList
-                        break
+                if element == 0 or element == 1:
+                    elementList.append(element)
+
+                else:
+                    for prime in primeList:
+                        while True:
+                            if element % prime == 0:
+                                elementList.append(prime)
+                                element /= prime
+                            else:
+                                break
+
+                if element == 1 or element == 0:
+                    self.numerator.elements[counter] = elementList
+
                 counter += 1
 
             for element in self.numerator.elements:
@@ -209,23 +209,23 @@ class Fraction:
             counter = 0
             for element in self.denominator.elements:
                 elementList = []
-                primeList = primerange(2, element // 2)
+                primeList = primerange(2, element)
 
-                for prime in primeList:
-                    counter2 = 0
-                    while True:
-                        if element == 0 or element == 1 and counter2 == 0:
-                            elementList.append(element)
-                            break
-                        if element % prime == 0:
-                            elementList.append(prime)
-                            element /= prime
-                        else:
-                            break
-                        counter2 += 1
-                    if element == 1 or element == 0:
-                        self.denominator.elements[counter] = elementList
-                        break
+                if element == 0 or element == 1:
+                    elementList.append(element)
+
+                else:
+                    for prime in primeList:
+                        while True:
+                            if element % prime == 0:
+                                elementList.append(prime)
+                                element /= prime
+                            else:
+                                break
+
+                if element == 1 or element == 0:
+                    self.denominator.elements[counter] = elementList
+
                 counter += 1
 
             for element in self.denominator.elements:

@@ -1,8 +1,22 @@
 
-elements = [1, 2, [3 , 4, 5, 6], 7, 8]
+class XVad:
 
-counter = 2
-for e in elements[2]:
-    elements.insert(counter, e)
-    counter += 1
-    print(elements)
+    def __init__(self, mult: int):
+        self.mult = mult
+
+    def __mul__(self, other):
+        self.mult = other * self.mult
+        if self.mult
+        return self
+
+    def __str__(self):
+        return f"{self.mult}X"
+
+
+c = XVad(2)
+
+d = XVad(3)
+
+c *= d
+
+print(c)

@@ -51,12 +51,12 @@ class Equation:
 
         counter = 0
         for item in self.left:
-            self.left[counter] = item * num
+            self.left[counter] = num * item
             counter += 1
 
         counter = 0
         for item in self.right:
-            self.right[counter] = item * num
+            self.right[counter] = num * item
             counter += 1
 
     def divide(self, num: int):
