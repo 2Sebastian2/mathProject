@@ -12,6 +12,7 @@ class XVar:
 
     def __init__(self, parent, multiplier: int, power: int):
         self.parent = parent
+        self.power = power
         self.multiplier = multiplier
         self.grade = power
 
@@ -23,8 +24,12 @@ class XVar:
         return self
 
     def __mul__(self, other):
-        self.multiplier = other * self.multiplier
-        return self
+        if type(self) == type(other):
+            self.multiplier *= other.multiplier
+            self.power += other.power
+            return self
+        else:
+            return self.multiplier * other if isinstance(other, int) or isinstance(other, float) else other * self
 
     def __truediv__(self, other):
         self.multiplier = Fraction(self.parent, [self.multiplier], other)
@@ -52,7 +57,7 @@ class Group:
 
     def __mul__(self, other):
         if randomChoice():
-            self.multiplier *= other
+            self.multiplier = other * self if isinstance(other, Fraction) else other * self.multiplier
         else:
             counter = 0
             for e in self.elements:
@@ -115,8 +120,8 @@ class Fraction:
         self.denominator = Group(self.parent, denominator, 1, 1, True) if isinstance(denominator, list) else denominator
 
     def __mul__(self, other):
-        if randomChoice():
-            self.multiplier = other * self.multiplier
+        if isinstance(other, Group):
+
         elif isinstance(other, Fraction):
             self.numerator = self.numerator * other.numerator
             self.denominator = self.denominator * other.denominator
@@ -132,7 +137,7 @@ class Fraction:
         self.factor(True, True)
 
         numeratorList = []
-        primeList = primerange(2, self.numerator.multiplier // 2)
+        primeList = primerange(2, self.numerator.multiplier)
         for prime in primeList:
             while True:
                 if self.numerator.multiplier % prime == 0:
@@ -140,12 +145,9 @@ class Fraction:
                     self.numerator.multiplier /= prime
                 else:
                     break
-            if self.numerator.multiplier == 1:
-                self.numerator.multiplier = numeratorList
-                break
 
         denominatorList = []
-        primeList = primerange(2, self.denominator.multiplier // 2)
+        primeList = primerange(2, self.denominator.multiplier)
         for prime in primeList:
             while True:
                 if self.denominator.multiplier % prime == 0:
@@ -153,9 +155,6 @@ class Fraction:
                     self.denominator.multiplier /= prime
                 else:
                     break
-            if self.denominator.multiplier == 1:
-                self.denominator.multiplier = denominatorList
-                break
 
         for prime in numeratorList:
             if prime in denominatorList:
@@ -231,13 +230,13 @@ class Fraction:
             for element in self.denominator.elements:
                 for prime in element:
                     notFactorable = False
-                    for element2 in self.numerator.elements:
+                    for element2 in self.denominator.elements:
                         if not prime in element2:
                             notFactorable = True
 
                     if not notFactorable:
                         self.numerator.multiplier *= prime
-                        for everyList in self.numerator.elements:
+                        for everyList in self.denominator.elements:
                             everyList.remove(prime)
 
     def __str__(self):

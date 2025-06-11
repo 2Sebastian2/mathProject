@@ -27,8 +27,8 @@ class Equation:
     def generate(self):
         self.randomResult()
         self.right.append(self.solution)
-        num = 1
-        for i in range(20):
+
+        for i in range(10):
             if randomChoice():
                 num = XVar(self, random.randint(1, 9), 1)
             elif randomChoice():
@@ -51,12 +51,12 @@ class Equation:
 
         counter = 0
         for item in self.left:
-            self.left[counter] = num * item
+            self.left[counter] = item * num
             counter += 1
 
         counter = 0
         for item in self.right:
-            self.right[counter] = num * item
+            self.right[counter] = item * num
             counter += 1
 
     def divide(self, num: int):
